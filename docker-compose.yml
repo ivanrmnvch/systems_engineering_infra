@@ -1,0 +1,29 @@
+version: '3.9'
+services:
+  postgresql:
+    image: postgres
+    restart: always
+    volumes:
+      - /home/ivanrmnvch/Programm/data/postgresql:/var/lib/postgresql/data
+    ports:
+      - "5432:5432"
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: 1234
+      POSTGRES_DB: secret1
+  spring:
+    image: systems_engineering_spring
+    restart: always
+    depends_on:
+      - postgresql
+    ports:
+      - "8090:8090"
+    environment:
+      SERVER_PORT: 8090
+      SPRING_DATASOURCE_URL: jdbc:postgresql://postgresql/secret1
+      SPRING_DATASOURCE_USERNAME: 'postgres'
+      SPRING_DATASOURCE_PASSWORD: '1234'
+  vue-app:
+    image: hw_store_vue2
+    ports:
+      - "8080:8080"
